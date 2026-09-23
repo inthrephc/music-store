@@ -72,7 +72,12 @@ public class ArtistServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        // Logic xu ly them moi artist
+        // Form gui request POST kem theo param name
+        String artistName = request.getParameter("name");
+        ArtistDAO dao = new ArtistDAO();
+        dao.create(artistName);
+        response.sendRedirect("/music-store/artist?view=list");
     }
 
 }

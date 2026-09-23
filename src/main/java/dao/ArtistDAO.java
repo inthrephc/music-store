@@ -12,15 +12,38 @@ import java.util.logging.Logger;
 
 /**
  * Artist Data Access Object (DAO) class
- * 
+ *
  * @author Nguyen Sy Nguyen
  */
 public class ArtistDAO extends DBContext {
+
     // create
+    public int create(String artistName) {
+        try {
+//            Tuyet doi khong duoc chen chuoi nhu the nay vi nguy co bi tan cong SQL Injection:
+//            String sql = "insert into Artist (name) values (" + artistName + ");";
+
+//            Cach lam dung
+            String sql = "insert into Artist (name) values (?);";
+            
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            
+//                   .setString(param1 la so thu tu cua dau "?", param2 la gia tri se duoc dat vao dau "?" -
+//                                                                        la gia tri can dien cua cau query)
+//                   .setString() ví cột (name) trong database là kiểu NVARCHAR
+            statement.setString(1, artistName);
+            
+            return statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ArtistDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return 0;
+    }
 
     // read
     public List<Artist> getList() {
-        
+
         // Bien chua ket qua
         List<Artist> result = new ArrayList<>();
 
@@ -43,12 +66,12 @@ public class ArtistDAO extends DBContext {
                 Artist artist = new Artist(id, name);
                 result.add(artist);
             }
-            
+
             return result;
         } catch (SQLException ex) {
             Logger.getLogger(ArtistDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return result;
     }
 
