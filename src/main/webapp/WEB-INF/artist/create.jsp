@@ -39,9 +39,9 @@
         <div class="container mt-3">
             <h1>Add new artist</h1>
             <form action="http://localhost:8080/list-artist/artist" method="POST">
-                <label id="input">Name: </label>
-                <input type="text" name="name" id="input"/><br/><br/>
-                <button type="submit">Submit!</button>
+                <label id="input" class="form-label">Name: </label>
+                <input type="text" class="form-control" name="name" id="input"/>
+                <button type="submit" class="btn btn-success">Submit!</button>
             </form>
         </div>
 

@@ -18,6 +18,20 @@ import model.Artist;
  */
 @WebServlet(name = "ArtistServlet", urlPatterns = {"/artist"})
 public class ArtistServlet extends HttpServlet {
+    
+    
+//    1) Thực hiện xây dựng logic bắt giá trị của param view
+//        - view == "create" -> fwd qua view để hiển thị form thêm mới
+//        - view == "edit" -> fwd qua view tương ứng để hiển thị form edit
+//        - view == "delete" -> fwd qua view tương ứng để hiển thị form delete
+//        - view == "list" hoặc không có view (null) hoặc view == "" -> fwd qua list.jsp
+//    2) Tạo view create.jsp. Trong create.jsp, viết 1 form để thêm mới artist gồm:
+//        - 1 input "name"
+//        - 1 button "Save/Submit"
+//        - 1 btn "Clear"
+//        - Các thành phần khác trong giao diện giữ nguyên như giao diện danh sách artist (header, nav, title,...)
+//    3) Xử lý logic thêm mới (DAO) -> query, statement, execute
+//    4) doPost() -> xử lý thêm mới, sau đó chuyển tiếp người dùng về lại trang danh sách.
 
     // CRUD
     // R (List): https://localhost/list-artist/artist
