@@ -76,5 +76,26 @@ public class ArtistDAO extends DBContext {
     }
 
     // update
+    public Artist getById(int id) {
+        try {
+            Artist artist = new Artist();
+            String sql = "select * from Artist where ArtistId = (?)";
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            statement.setString(1, String.valueOf(id));
+            
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                String artistName = result.getString(2);
+                artist.setId(id);
+                artist.setName(artistName);
+            }
+            return artist;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ArtistDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     // delete
 }

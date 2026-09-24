@@ -35,6 +35,9 @@
                 </div>
             </div>
         </nav>
+        <form action="/music-store/artist" method="GET" class="d-inline">
+            <button type="submit" name="view" value="create" class="btn btn-success">Add artist</button>
+        </form>
         <div class="container mt-3">
             <h1>Artist list</h1>
             <table class="table table-hover">
@@ -60,7 +63,7 @@
                 %>
             </table>
         </div>
-                
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     </body>
 </html>

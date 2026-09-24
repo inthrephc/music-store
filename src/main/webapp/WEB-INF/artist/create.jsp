@@ -39,13 +39,12 @@
         <div class="container mt-3">
             <h1>Add new artist</h1>
             <form action="http://localhost:8080/music-store/artist" method="POST">
+                <input type="hidden" name="action" value="create"/>
                 <label id="input" class="form-label">Name: </label>
                 <input type="text" class="form-control" name="name" id="input"/>
                 <button type="submit" class="btn btn-success">Submit</button>
             </form>
         </div>
-
-
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     </body>

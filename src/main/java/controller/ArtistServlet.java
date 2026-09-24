@@ -18,8 +18,7 @@ import model.Artist;
  */
 @WebServlet(name = "ArtistServlet", urlPatterns = {"/artist"})
 public class ArtistServlet extends HttpServlet {
-    
-    
+
 //    1) Thực hiện xây dựng logic bắt giá trị của param view
 //        - view == "create" -> fwd qua view để hiển thị form thêm mới
 //        - view == "edit" -> fwd qua view tương ứng để hiển thị form edit
@@ -32,7 +31,6 @@ public class ArtistServlet extends HttpServlet {
 //        - Các thành phần khác trong giao diện giữ nguyên như giao diện danh sách artist (header, nav, title,...)
 //    3) Xử lý logic thêm mới (DAO) -> query, statement, execute
 //    4) doPost() -> xử lý thêm mới, sau đó chuyển tiếp người dùng về lại trang danh sách.
-
     // CRUD
     // R (List): https://localhost/list-artist/artist
     // C (Create): https://localhost/list-artist/artist?view=create
@@ -51,6 +49,11 @@ public class ArtistServlet extends HttpServlet {
         if ("create".equals(view)) {
             request.getRequestDispatcher("/WEB-INF/artist/create.jsp").forward(request, response);
         } else if ("edit".equals(view)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            ArtistDAO dao = new ArtistDAO();
+            Artist artist = dao.getById(id);
+            request.setAttribute("artistId", artist.getId());
+            request.setAttribute("artistName", artist.getName());
             request.getRequestDispatcher("/WEB-INF/artist/edit.jsp").forward(request, response);
         } else if ("delete".equals(view)) {
             request.getRequestDispatcher("/WEB-INF/artist/delete.jsp").forward(request, response);
@@ -72,12 +75,30 @@ public class ArtistServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Logic xu ly them moi artist
-        // Form gui request POST kem theo param name
-        String artistName = request.getParameter("name");
-        ArtistDAO dao = new ArtistDAO();
-        dao.create(artistName);
-        response.sendRedirect("/music-store/artist?view=list");
-    }
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
 
+        switch (action) {
+            case "create":
+                String artistName = request.getParameter("name");
+                ArtistDAO dao = new ArtistDAO();
+                dao.create(artistName);
+                response.sendRedirect("/music-store/artist?view=list");
+                break;
+
+            case "edit":
+                //
+                break;
+
+            case "delete":
+                // 
+                break;
+
+            default:
+                response.sendRedirect(request.getContextPath() + "/artist?view=list");
+                break;
+        }
+    }
 }
