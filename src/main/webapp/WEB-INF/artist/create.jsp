@@ -2,6 +2,9 @@
 <%@page import="model.Artist"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="/WEB-INF/include/header.jsp" %>
+<% 
+// <jsp:include page="/WEB-INF/include/header.jsp"/> Cach 2
+%>
 
 <h1>Add new artist</h1>
 <form action="http://localhost:8080/music-store/artist" method="POST">

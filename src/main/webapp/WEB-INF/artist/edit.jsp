@@ -4,6 +4,9 @@
 %>
 
 <%@include file="/WEB-INF/include/header.jsp" %>
+<% 
+// <jsp:include page="/WEB-INF/include/header.jsp"/> Cach 2
+%>
 
 <h1>Edit artist</h1>
 <form action="http://localhost:8080/music-store/artist" method="POST">
