@@ -85,7 +85,7 @@ public class ArtistServlet extends HttpServlet {
                 String artistName = request.getParameter("name");
                 ArtistDAO dao = new ArtistDAO();
                 dao.create(artistName);
-                response.sendRedirect("/music-store/artist?view=list");
+                response.sendRedirect(request.getContextPath() + "/artist?view=list");
                 break;
 
             case "edit":

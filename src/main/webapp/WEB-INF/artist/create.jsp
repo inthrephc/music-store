@@ -7,7 +7,7 @@
 %>
 
 <h1>Add new artist</h1>
-<form action="http://localhost:8080/music-store/artist" method="POST">
+<form action="<%= request.getContextPath() %>/artist" method="POST">
     <input type="hidden" name="action" value="create"/>
     <label id="input" class="form-label">Name: </label>
     <input type="text" class="form-control" name="name" id="input"/>

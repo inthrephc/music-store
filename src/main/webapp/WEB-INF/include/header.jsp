@@ -9,7 +9,7 @@
     <body>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="https://localhost:8080/music-store/artist">FPT Music Store</a>
+                <a class="navbar-brand" href="<%= request.getContextPath() %>/artist">FPT Music Store</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -21,7 +21,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">View artists list</a></li>
-                                <li><a class="dropdown-item" href="#">Add new artist</a></li>
+                                <li><a class="dropdown-item" href="<%= request.getContextPath() %>/artist?view=create">Add new artist</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -33,7 +33,4 @@
                 </div>
             </div>
         </nav>
-        <form action="/music-store/artist" method="GET" class="d-inline">
-            <button type="submit" name="view" value="create" class="btn btn-success">Add artist</button>
-        </form>
         <div class="container mt-3">
