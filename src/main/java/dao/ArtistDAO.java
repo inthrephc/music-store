@@ -25,14 +25,14 @@ public class ArtistDAO extends DBContext {
 
 //            Cach lam dung
             String sql = "insert into Artist (name) values (?);";
-            
+
             PreparedStatement statement = this.getConnection().prepareStatement(sql);
-            
+
 //                   .setString(param1 la so thu tu cua dau "?", param2 la gia tri se duoc dat vao dau "?" -
 //                                                                        la gia tri can dien cua cau query)
 //                   .setString() ví cột (name) trong database là kiểu NVARCHAR
             statement.setString(1, artistName);
-            
+
             return statement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ArtistDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -79,23 +79,36 @@ public class ArtistDAO extends DBContext {
     public Artist getById(int id) {
         try {
             Artist artist = new Artist();
-            String sql = "select * from Artist where ArtistId = (?)";
+            String sql = "select * from Artist where ArtistId = (?);";
             PreparedStatement statement = this.getConnection().prepareStatement(sql);
             statement.setString(1, String.valueOf(id));
-            
+
             ResultSet result = statement.executeQuery();
-            while (result.next()) {
+            if (result.next()) {
                 String artistName = result.getString(2);
                 artist.setId(id);
                 artist.setName(artistName);
+                return artist;
             }
-            return artist;
-            
+        
         } catch (SQLException ex) {
             Logger.getLogger(ArtistDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
+
+    public int update(int id, String name) {
+        try {
+            String sql = "update Artist set name = ? where ArtistId = ?;";
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            statement.setString(1, name);
+            statement.setString(2, String.valueOf(id));
+            return statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ArtistDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
     // delete
 }

@@ -89,7 +89,11 @@ public class ArtistServlet extends HttpServlet {
                 break;
 
             case "edit":
-                //
+                int artistId = Integer.parseInt(request.getParameter("id"));
+                artistName = request.getParameter("name");
+                dao = new ArtistDAO();
+                dao.update(artistId, artistName);
+                response.sendRedirect(request.getContextPath() + "/artist?view=list");
                 break;
 
             case "delete":
