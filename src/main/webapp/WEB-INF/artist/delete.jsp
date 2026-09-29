@@ -1,17 +1,17 @@
-<%-- 
-    Document   : delete
-    Created on : Sep 23, 2026, 9:37:04 PM
-    Author     : ADMIN
---%>
+<%
+    int artistId = (int) request.getAttribute("artistId");
+    String artistName = (String) request.getAttribute("artistName");
+%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+<%@include file="/WEB-INF/include/header.jsp" %>
+
+<form action="<%= request.getContextPath() %>/artist" method="POST">
+    <h1>Delete artist</h1>
+    <p>Are you sure to delete artist <%= artistName %> with id <%= artistId %></p>
+    <input type="hidden" name="action" value="delete"/>
+    <input type="hidden" name="id" value="<%= artistId %>"/>
+    <button type="submit" class="btn btn-danger" >Delete</button>
+    <a class="btn bg-secondary text-white" href="<%= request.getContextPath() %>/artist">Back</a>
+</form>
+
+<%@include file="/WEB-INF/include/footer.jsp" %>

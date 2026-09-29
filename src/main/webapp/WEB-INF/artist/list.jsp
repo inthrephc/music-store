@@ -25,7 +25,7 @@
         <td><%= ar.getName()%></td>
         <td>
             <a class="btn btn-primary btn-sm" href="<%= request.getContextPath() %>/artist?view=edit&id=<%= ar.getId() %>">Edit</a>
-            <button class="btn btn-danger btn-sm">Delete</button>
+            <a class="btn btn-danger btn-sm" href="<%= request.getContextPath() %>/artist?view=delete&id=<%= ar.getId() %>">Delete</a>
         </td>
     </tr>
     <%

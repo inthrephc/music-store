@@ -56,6 +56,11 @@ public class ArtistServlet extends HttpServlet {
             request.setAttribute("artistName", artist.getName());
             request.getRequestDispatcher("/WEB-INF/artist/edit.jsp").forward(request, response);
         } else if ("delete".equals(view)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            ArtistDAO dao = new ArtistDAO();
+            Artist artist = dao.getById(id);
+            request.setAttribute("artistId", artist.getId());
+            request.setAttribute("artistName", artist.getName());
             request.getRequestDispatcher("/WEB-INF/artist/delete.jsp").forward(request, response);
         } else {
 
@@ -76,20 +81,22 @@ public class ArtistServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+        int artistId;
+        String artistName;
         if (action == null) {
             action = "";
         }
 
         switch (action) {
             case "create":
-                String artistName = request.getParameter("name");
+                artistName = request.getParameter("name");
                 ArtistDAO dao = new ArtistDAO();
                 dao.create(artistName);
                 response.sendRedirect(request.getContextPath() + "/artist?view=list");
                 break;
 
             case "edit":
-                int artistId = Integer.parseInt(request.getParameter("id"));
+                artistId = Integer.parseInt(request.getParameter("id"));
                 artistName = request.getParameter("name");
                 dao = new ArtistDAO();
                 dao.update(artistId, artistName);
@@ -97,7 +104,10 @@ public class ArtistServlet extends HttpServlet {
                 break;
 
             case "delete":
-                // 
+                artistId = Integer.parseInt(request.getParameter("id"));
+                dao = new ArtistDAO();
+                dao.delete(artistId);
+                response.sendRedirect(request.getContextPath() + "/artist?view=list");
                 break;
 
             default:

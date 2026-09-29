@@ -15,6 +15,7 @@
     <label id="input" class="form-label" >Name: </label>
     <input type="text" class="form-control" name="name" id="input" value="<%= artistName %>"/>
     <button type="submit" class="btn btn-success">Submit</button>
+    <button type="reset" class="btn bg-secondary text-white">Clear</button>
 </form>
 
 <%@include file="/WEB-INF/include/footer.jsp" %>

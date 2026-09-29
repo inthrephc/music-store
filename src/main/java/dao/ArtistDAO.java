@@ -102,7 +102,7 @@ public class ArtistDAO extends DBContext {
             String sql = "update Artist set name = ? where ArtistId = ?;";
             PreparedStatement statement = this.getConnection().prepareStatement(sql);
             statement.setString(1, name);
-            statement.setString(2, String.valueOf(id));
+            statement.setInt(2, id);
             return statement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ArtistDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -111,4 +111,16 @@ public class ArtistDAO extends DBContext {
     }
 
     // delete
+    public int delete(int id) {
+        // chua on, phai lam theo huong soft delete
+        try {
+            String sql = "delete from Artist where ArtistId = ?;";
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            statement.setInt(1, id);
+            return statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ArtistDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
 }
