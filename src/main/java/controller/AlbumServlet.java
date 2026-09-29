@@ -6,6 +6,7 @@
 package controller;
 
 import dao.AlbumDAO;
+import dao.ArtistDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -33,6 +34,9 @@ public class AlbumServlet extends HttpServlet {
         }
 
         if ("create".equals(view)) {
+            ArtistDAO artistDAO = new ArtistDAO();
+            List<Artist> list = artistDAO.getList();
+            request.setAttribute("list", list);
             request.getRequestDispatcher("/WEB-INF/album/create.jsp").forward(request, response);
         } else if ("edit".equals(view)) {
             request.getRequestDispatcher("/WEB-INF/album/edit.jsp").forward(request, response);
@@ -50,6 +54,33 @@ public class AlbumServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         
+        
+        
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
+
+        switch (action) {
+            case "create":
+                //
+                response.sendRedirect(request.getContextPath() + "/album?view=list");
+                break;
+
+            case "edit":
+                //
+                response.sendRedirect(request.getContextPath() + "/album?view=list");
+                break;
+
+            case "delete":
+                //
+                response.sendRedirect(request.getContextPath() + "/album?view=list");
+                break;
+
+            default:
+                response.sendRedirect(request.getContextPath() + "/album?view=list");
+                break;
+        }
     }
 
 }
