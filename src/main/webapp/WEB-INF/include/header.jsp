@@ -20,8 +20,26 @@
                                 Artists
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">View artists list</a></li>
+                                <li><a class="dropdown-item" href="<%= request.getContextPath() %>/artist?view=list">View artists list</a></li>
                                 <li><a class="dropdown-item" href="<%= request.getContextPath() %>/artist?view=create">Add new artist</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Albums
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="<%= request.getContextPath() %>/album?view=list">View album list</a></li>
+                                <li><a class="dropdown-item" href="<%= request.getContextPath() %>/album?view=create">Add new album</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Genres
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="<%= request.getContextPath() %>/genre?view=list">View genre list</a></li>
+                                <li><a class="dropdown-item" href="<%= request.getContextPath() %>/genre?view=create">Add new genre</a></li>
                             </ul>
                         </li>
                     </ul>
