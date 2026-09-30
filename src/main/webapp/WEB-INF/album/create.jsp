@@ -1,6 +1,6 @@
 <%@page import="java.util.List"%>
 <%@page import="model.Artist"%>
-<% 
+<%
     List<Artist> artistList = (List<Artist>) request.getAttribute("list");
 %>
 
@@ -14,9 +14,10 @@
     <input type="text" class="form-control" name="title" id="title"/>
     <label id="artist" class="form-label">Artist</label>
     <select class="form-select" id="artist" name="artist">
-        <% for (Artist artist : artistList) { %>
-            <option value="<%= artist.getId() %>" selected><%= artist.getName() %></option>
-        <% } %>
+        <option value="" selected disabled>Please select an artist</option>
+        <% for (Artist artist : artistList) {%>
+        <option value="<%= artist.getId()%>"><%= artist.getName()%></option>
+        <% }%>
     </select>
 
     <button type="submit" class="btn btn-success">Submit</button>

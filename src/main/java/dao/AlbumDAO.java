@@ -46,6 +46,19 @@ public class AlbumDAO extends DBContext {
 
         return result;
     }
+
+    public int create(String title, int artistId) {
+        try {
+            String sql = "insert into Album (Title, ArtistId) values (?, ?);";
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            statement.setString(1, title);
+            statement.setInt(2, artistId);
+            return statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AlbumDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
     
     
 }

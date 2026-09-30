@@ -54,7 +54,9 @@ public class AlbumServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         
-        
+        String title;
+        int artistId;
+        AlbumDAO dao;
         
         String action = request.getParameter("action");
         if (action == null) {
@@ -63,7 +65,10 @@ public class AlbumServlet extends HttpServlet {
 
         switch (action) {
             case "create":
-                //
+                title = request.getParameter("title");
+                artistId = Integer.parseInt(request.getParameter("artist"));
+                dao = new AlbumDAO();
+                dao.create(title, artistId);
                 response.sendRedirect(request.getContextPath() + "/album?view=list");
                 break;
 
