@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dao.AlbumDAO;
@@ -22,12 +21,12 @@ import model.Artist;
  *
  * @author NguyenNSCE200377
  */
-@WebServlet(name="AlbumServlet", urlPatterns={"/album"})
+@WebServlet(name = "AlbumServlet", urlPatterns = {"/album"})
 public class AlbumServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         String view = request.getParameter("view");
         AlbumDAO albumDAO;
         if (view == null || view.isEmpty()) {
@@ -35,11 +34,17 @@ public class AlbumServlet extends HttpServlet {
         }
 
         if ("create".equals(view)) {
-            int artistId = Integer.parseInt(request.getParameter("artistId"));
+            int artistId = -1;
+            try {
+                artistId = Integer.parseInt(request.getParameter("artistId"));
+                request.setAttribute("artistId", artistId);
+            } catch (Exception e) {
+                artistId = -1;
+                request.setAttribute("artistId", artistId);
+            }
             ArtistDAO artistDAO = new ArtistDAO();
             List<Artist> list = artistDAO.getList();
             request.setAttribute("list", list);
-            request.setAttribute("artistId", artistId);
             request.getRequestDispatcher("/WEB-INF/album/create.jsp").forward(request, response);
         } else if ("edit".equals(view)) {
             ArtistDAO artistDAO = new ArtistDAO();
@@ -69,13 +74,13 @@ public class AlbumServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        
+            throws ServletException, IOException {
+
         int id;
         String title;
         int artistId;
         AlbumDAO dao;
-        
+
         String action = request.getParameter("action");
         if (action == null) {
             action = "";
