@@ -51,6 +51,11 @@ public class AlbumServlet extends HttpServlet {
             request.setAttribute("artistId", album.getArtist().getId());
             request.getRequestDispatcher("/WEB-INF/album/edit.jsp").forward(request, response);
         } else if ("delete".equals(view)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            albumDAO = new AlbumDAO();
+            Album album = albumDAO.getById(id);
+            request.setAttribute("id", album.getId());
+            request.setAttribute("title", album.getTitle());
             request.getRequestDispatcher("/WEB-INF/album/delete.jsp").forward(request, response);
         } else {
             albumDAO = new AlbumDAO();
@@ -93,7 +98,9 @@ public class AlbumServlet extends HttpServlet {
                 break;
 
             case "delete":
-                //
+                id = Integer.parseInt(request.getParameter("id"));
+                dao = new AlbumDAO();
+                dao.delete(id);
                 response.sendRedirect(request.getContextPath() + "/album?view=list");
                 break;
 

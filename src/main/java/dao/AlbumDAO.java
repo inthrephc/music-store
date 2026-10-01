@@ -88,6 +88,18 @@ public class AlbumDAO extends DBContext {
         }
         return -1;
     }
+
+    public int delete(int id) {
+        try {
+            String sql = "delete from Album where AlbumId = ?;";
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            statement.setInt(1, id);
+            return statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AlbumDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
     
     
 }
