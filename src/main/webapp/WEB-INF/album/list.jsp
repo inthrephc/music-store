@@ -22,8 +22,8 @@
         <td><%= al.getTitle() %></td>
         <td><%= al.getArtist().getName() %></td>
         <td>
-            <a class="btn btn-primary btn-sm" href="<%= request.getContextPath() %>/artist?view=edit&id=<%= al.getId() %>">Edit</a>
-            <a class="btn btn-danger btn-sm" href="<%= request.getContextPath() %>/artist?view=delete&id=<%= al.getId() %>">Delete</a>
+            <a class="btn btn-primary btn-sm" href="<%= request.getContextPath() %>/album?view=edit&id=<%= al.getId() %>">Edit</a>
+            <a class="btn btn-danger btn-sm" href="<%= request.getContextPath() %>/album?view=delete&id=<%= al.getId() %>">Delete</a>
         </td>
     </tr>
     <%

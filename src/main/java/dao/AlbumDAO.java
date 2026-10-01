@@ -57,7 +57,36 @@ public class AlbumDAO extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(AlbumDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return 0;
+        return -1;
+    }
+
+    public Album getById(int id) {
+        try {
+            String sql = "select * from Album where AlbumId = ?";
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return new Album(rs.getInt(1), rs.getString(2), new Artist(rs.getInt(3)));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AlbumDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public int update(int id, String title, int artistId) {
+        try {
+            String sql = "update Album set Title = ?, ArtistId = ? where AlbumId = ?";
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            statement.setString(1, title);
+            statement.setInt(2, id);
+            statement.setInt(3, artistId);
+            return statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AlbumDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
     }
     
     

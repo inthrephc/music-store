@@ -29,6 +29,7 @@ public class AlbumServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         String view = request.getParameter("view");
+        AlbumDAO albumDAO;
         if (view == null || view.isEmpty()) {
             view = "list";
         }
@@ -39,11 +40,20 @@ public class AlbumServlet extends HttpServlet {
             request.setAttribute("list", list);
             request.getRequestDispatcher("/WEB-INF/album/create.jsp").forward(request, response);
         } else if ("edit".equals(view)) {
+            ArtistDAO artistDAO = new ArtistDAO();
+            List<Artist> list = artistDAO.getList();
+            request.setAttribute("list", list);
+            int id = Integer.parseInt(request.getParameter("id"));
+            albumDAO = new AlbumDAO();
+            Album album = albumDAO.getById(id);
+            request.setAttribute("id", album.getId());
+            request.setAttribute("title", album.getTitle());
+            request.setAttribute("artistId", album.getArtist().getId());
             request.getRequestDispatcher("/WEB-INF/album/edit.jsp").forward(request, response);
         } else if ("delete".equals(view)) {
             request.getRequestDispatcher("/WEB-INF/album/delete.jsp").forward(request, response);
         } else {
-            AlbumDAO albumDAO = new AlbumDAO();
+            albumDAO = new AlbumDAO();
             List<Album> list = albumDAO.getList();
             request.setAttribute("list", list);
             request.getRequestDispatcher("/WEB-INF/album/list.jsp").forward(request, response);
@@ -54,6 +64,7 @@ public class AlbumServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         
+        int id;
         String title;
         int artistId;
         AlbumDAO dao;
@@ -73,7 +84,11 @@ public class AlbumServlet extends HttpServlet {
                 break;
 
             case "edit":
-                //
+                id = Integer.parseInt(request.getParameter("id"));
+                title = request.getParameter("title");
+                artistId = Integer.parseInt(request.getParameter("artist"));
+                dao = new AlbumDAO();
+                dao.update(id, title, artistId);
                 response.sendRedirect(request.getContextPath() + "/album?view=list");
                 break;
 
