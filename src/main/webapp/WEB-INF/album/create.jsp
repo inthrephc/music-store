@@ -2,6 +2,7 @@
 <%@page import="model.Artist"%>
 <%
     List<Artist> artistList = (List<Artist>) request.getAttribute("list");
+    int artistId = (int) request.getAttribute("artistId");
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -16,7 +17,7 @@
     <select class="form-select" id="artist" name="artist">
         <option value="" selected disabled>Please select an artist</option>
         <% for (Artist artist : artistList) {%>
-        <option value="<%= artist.getId()%>"><%= artist.getName()%></option>
+        <option value="<%= artist.getId()%>" <% if (artist.getId() == artistId) { %> selected <% } %> ><%= artist.getName()%></option>
         <% }%>
     </select>
 
