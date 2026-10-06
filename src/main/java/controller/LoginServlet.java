@@ -5,6 +5,7 @@
 
 package controller;
 
+import dao.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.User;
 
 /**
  *
@@ -29,7 +31,16 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
         
+        UserDAO dao = new UserDAO();
+        User user = dao.login(username, password);
+        
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/artist?view=list");
+        }
     }
-
 }
