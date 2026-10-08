@@ -1,3 +1,4 @@
+<%@page import="model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -9,7 +10,7 @@
     <body>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="<%= request.getContextPath() %>/artist">FPT Music Store</a>
+                <a class="navbar-brand" href="<%= request.getContextPath()%>/artist">FPT Music Store</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -20,8 +21,8 @@
                                 Artists
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="<%= request.getContextPath() %>/artist?view=list">View artists list</a></li>
-                                <li><a class="dropdown-item" href="<%= request.getContextPath() %>/artist?view=create">Add new artist</a></li>
+                                <li><a class="dropdown-item" href="<%= request.getContextPath()%>/artist?view=list">View artists list</a></li>
+                                <li><a class="dropdown-item" href="<%= request.getContextPath()%>/artist?view=create">Add new artist</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -29,8 +30,8 @@
                                 Albums
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="<%= request.getContextPath() %>/album?view=list">View album list</a></li>
-                                <li><a class="dropdown-item" href="<%= request.getContextPath() %>/album?view=create">Add new album</a></li>
+                                <li><a class="dropdown-item" href="<%= request.getContextPath()%>/album?view=list">View album list</a></li>
+                                <li><a class="dropdown-item" href="<%= request.getContextPath()%>/album?view=create">Add new album</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -38,15 +39,31 @@
                                 Genres
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="<%= request.getContextPath() %>/genre?view=list">View genre list</a></li>
-                                <li><a class="dropdown-item" href="<%= request.getContextPath() %>/genre?view=create">Add new genre</a></li>
+                                <li><a class="dropdown-item" href="<%= request.getContextPath()%>/genre?view=list">View genre list</a></li>
+                                <li><a class="dropdown-item" href="<%= request.getContextPath()%>/genre?view=create">Add new genre</a></li>
                             </ul>
                         </li>
                     </ul>
+                    <%
+                        // Trong JSP, ta khong can phai lay session tu request.getSession() nhu Servlet
+                        // Vi session la mot trong cac implicit object (doi tuong duoc xay dung san cho JSP)
+                        User user = (User) session.getAttribute("loggedInUser");
+                    %>
                     <ul class="navbar-nav">
+                        <% if (user == null) {%>
                         <li class="nav-item">
-                            <a href="<%= request.getContextPath() %>/login" class="nav-link">Login</a>
+                            <a href="<%= request.getContextPath()%>/login" class="nav-link">Login</a>
                         </li>
+                        <% } else {%>
+                        <li class="nav-item">
+                            <a href="<%= request.getContextPath()%>/logout" class="nav-link">
+                                <%-- Co the dung Hello <%= user.getUsername() %> --%>
+                                
+                                <%-- Duoi day su dung EL (Expression Language) - Ngon ngu bieu thuc --%>
+                                Hello ${loggedInUser.username}, Logout
+                            </a>
+                        </li>
+                        <% }%>
                     </ul>
                 </div>
             </div>

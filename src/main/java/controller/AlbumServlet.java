@@ -13,9 +13,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Album;
 import model.Artist;
+import model.User;
 
 /**
  *
@@ -27,48 +29,56 @@ public class AlbumServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String view = request.getParameter("view");
-        AlbumDAO albumDAO;
-        if (view == null || view.isEmpty()) {
-            view = "list";
-        }
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("loggedInUser");
 
-        if ("create".equals(view)) {
-            int artistId = -1;
-            try {
-                artistId = Integer.parseInt(request.getParameter("artistId"));
-                request.setAttribute("artistId", artistId);
-            } catch (Exception e) {
-                artistId = -1;
-                request.setAttribute("artistId", artistId);
-            }
-            ArtistDAO artistDAO = new ArtistDAO();
-            List<Artist> list = artistDAO.getList();
-            request.setAttribute("list", list);
-            request.getRequestDispatcher("/WEB-INF/album/create.jsp").forward(request, response);
-        } else if ("edit".equals(view)) {
-            ArtistDAO artistDAO = new ArtistDAO();
-            List<Artist> list = artistDAO.getList();
-            request.setAttribute("list", list);
-            int id = Integer.parseInt(request.getParameter("id"));
-            albumDAO = new AlbumDAO();
-            Album album = albumDAO.getById(id);
-            request.setAttribute("id", album.getId());
-            request.setAttribute("title", album.getTitle());
-            request.setAttribute("artistId", album.getArtist().getId());
-            request.getRequestDispatcher("/WEB-INF/album/edit.jsp").forward(request, response);
-        } else if ("delete".equals(view)) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            albumDAO = new AlbumDAO();
-            Album album = albumDAO.getById(id);
-            request.setAttribute("id", album.getId());
-            request.setAttribute("title", album.getTitle());
-            request.getRequestDispatcher("/WEB-INF/album/delete.jsp").forward(request, response);
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
         } else {
-            albumDAO = new AlbumDAO();
-            List<Album> list = albumDAO.getList();
-            request.setAttribute("list", list);
-            request.getRequestDispatcher("/WEB-INF/album/list.jsp").forward(request, response);
+
+            String view = request.getParameter("view");
+            AlbumDAO albumDAO;
+            if (view == null || view.isEmpty()) {
+                view = "list";
+            }
+
+            if ("create".equals(view)) {
+                int artistId = -1;
+                try {
+                    artistId = Integer.parseInt(request.getParameter("artistId"));
+                    request.setAttribute("artistId", artistId);
+                } catch (Exception e) {
+                    artistId = -1;
+                    request.setAttribute("artistId", artistId);
+                }
+                ArtistDAO artistDAO = new ArtistDAO();
+                List<Artist> list = artistDAO.getList();
+                request.setAttribute("list", list);
+                request.getRequestDispatcher("/WEB-INF/album/create.jsp").forward(request, response);
+            } else if ("edit".equals(view)) {
+                ArtistDAO artistDAO = new ArtistDAO();
+                List<Artist> list = artistDAO.getList();
+                request.setAttribute("list", list);
+                int id = Integer.parseInt(request.getParameter("id"));
+                albumDAO = new AlbumDAO();
+                Album album = albumDAO.getById(id);
+                request.setAttribute("id", album.getId());
+                request.setAttribute("title", album.getTitle());
+                request.setAttribute("artistId", album.getArtist().getId());
+                request.getRequestDispatcher("/WEB-INF/album/edit.jsp").forward(request, response);
+            } else if ("delete".equals(view)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                albumDAO = new AlbumDAO();
+                Album album = albumDAO.getById(id);
+                request.setAttribute("id", album.getId());
+                request.setAttribute("title", album.getTitle());
+                request.getRequestDispatcher("/WEB-INF/album/delete.jsp").forward(request, response);
+            } else {
+                albumDAO = new AlbumDAO();
+                List<Album> list = albumDAO.getList();
+                request.setAttribute("list", list);
+                request.getRequestDispatcher("/WEB-INF/album/list.jsp").forward(request, response);
+            }
         }
     }
 

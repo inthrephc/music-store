@@ -8,8 +8,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Artist;
+import model.User;
 
 /**
  * Main servlet for the web
@@ -39,41 +41,48 @@ public class ArtistServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("loggedInUser");
 
-        String view = request.getParameter("view");
-
-        if (view == null || view.isEmpty()) {
-            view = "list";
-        }
-
-        if ("create".equals(view)) {
-            request.getRequestDispatcher("/WEB-INF/artist/create.jsp").forward(request, response);
-        } else if ("edit".equals(view)) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            ArtistDAO dao = new ArtistDAO();
-            Artist artist = dao.getById(id);
-            request.setAttribute("artistId", artist.getId());
-            request.setAttribute("artistName", artist.getName());
-            request.getRequestDispatcher("/WEB-INF/artist/edit.jsp").forward(request, response);
-        } else if ("delete".equals(view)) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            ArtistDAO dao = new ArtistDAO();
-            Artist artist = dao.getById(id);
-            request.setAttribute("artistId", artist.getId());
-            request.setAttribute("artistName", artist.getName());
-            request.getRequestDispatcher("/WEB-INF/artist/delete.jsp").forward(request, response);
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
         } else {
 
-            // Goi DAO
-            ArtistDAO artistDAO = new ArtistDAO();
+            String view = request.getParameter("view");
 
-            // Lay duoc danh sach Artists trong bang Artist
-            List<Artist> list = artistDAO.getList();
+            if (view == null || view.isEmpty()) {
+                view = "list";
+            }
 
-            // Truyen du lieu de hien thi
-            request.setAttribute("list", list);
+            if ("create".equals(view)) {
+                request.getRequestDispatcher("/WEB-INF/artist/create.jsp").forward(request, response);
+            } else if ("edit".equals(view)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                ArtistDAO dao = new ArtistDAO();
+                Artist artist = dao.getById(id);
+                request.setAttribute("artistId", artist.getId());
+                request.setAttribute("artistName", artist.getName());
+                request.getRequestDispatcher("/WEB-INF/artist/edit.jsp").forward(request, response);
+            } else if ("delete".equals(view)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                ArtistDAO dao = new ArtistDAO();
+                Artist artist = dao.getById(id);
+                request.setAttribute("artistId", artist.getId());
+                request.setAttribute("artistName", artist.getName());
+                request.getRequestDispatcher("/WEB-INF/artist/delete.jsp").forward(request, response);
+            } else {
 
-            request.getRequestDispatcher("/WEB-INF/artist/list.jsp").forward(request, response);
+                // Goi DAO
+                ArtistDAO artistDAO = new ArtistDAO();
+
+                // Lay duoc danh sach Artists trong bang Artist
+                List<Artist> list = artistDAO.getList();
+
+                // Truyen du lieu de hien thi
+                request.setAttribute("list", list);
+
+                request.getRequestDispatcher("/WEB-INF/artist/list.jsp").forward(request, response);
+            }
         }
     }
 

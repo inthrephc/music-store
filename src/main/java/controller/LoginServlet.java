@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.User;
 
 /**
@@ -40,6 +41,10 @@ public class LoginServlet extends HttpServlet {
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login");
         } else {
+            // Luu trang thai dang nhap
+            HttpSession session = request.getSession();
+            session.setAttribute("loggedInUser", user);
+            
             response.sendRedirect(request.getContextPath() + "/artist?view=list");
         }
     }
