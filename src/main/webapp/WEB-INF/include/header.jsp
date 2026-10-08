@@ -1,5 +1,10 @@
 <%@page import="model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    // Trong JSP, ta khong can phai lay session tu request.getSession() nhu Servlet
+    // Vi session la mot trong cac implicit object (doi tuong duoc xay dung san cho JSP)
+    User user = (User) session.getAttribute("loggedInUser");
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,6 +15,7 @@
     <body>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
+                <% if (user != null) {%>
                 <a class="navbar-brand" href="<%= request.getContextPath()%>/artist">FPT Music Store</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -44,12 +50,9 @@
                             </ul>
                         </li>
                     </ul>
-                    <%
-                        // Trong JSP, ta khong can phai lay session tu request.getSession() nhu Servlet
-                        // Vi session la mot trong cac implicit object (doi tuong duoc xay dung san cho JSP)
-                        User user = (User) session.getAttribute("loggedInUser");
-                    %>
-                    <ul class="navbar-nav">
+                <% } %>
+
+                    <ul class="navbar-nav ms-auto">
                         <% if (user == null) {%>
                         <li class="nav-item">
                             <a href="<%= request.getContextPath()%>/login" class="nav-link">Login</a>
@@ -58,7 +61,7 @@
                         <li class="nav-item">
                             <a href="<%= request.getContextPath()%>/logout" class="nav-link">
                                 <%-- Co the dung Hello <%= user.getUsername() %> --%>
-                                
+
                                 <%-- Duoi day su dung EL (Expression Language) - Ngon ngu bieu thuc --%>
                                 Hello ${loggedInUser.username}, Logout
                             </a>

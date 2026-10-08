@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -23,7 +24,11 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
+        // Xoa tat cac du lieu da luu trong session
+        HttpSession session = request.getSession();
+        session.invalidate();
+        // Sau do redirect ve trang login
+        response.sendRedirect(request.getContextPath() + "/login");
     }
 
     @Override
