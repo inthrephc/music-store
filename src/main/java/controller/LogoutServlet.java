@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,23 +18,33 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author NguyenNSCE200377
  */
-@WebServlet(name="LogoutServlet", urlPatterns={"/logout"})
+@WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
 public class LogoutServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         // Xoa tat cac du lieu da luu trong session
         HttpSession session = request.getSession();
         session.invalidate();
+
+        // Xoa tat ca cookie
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                c.setMaxAge(0);
+                response.addCookie(c);
+            }
+        }
+
         // Sau do redirect ve trang login
         response.sendRedirect(request.getContextPath() + "/login");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        
+            throws ServletException, IOException {
+
     }
 
 }

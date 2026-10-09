@@ -53,6 +53,9 @@
                 <% } %>
 
                     <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Theme: ${cookie["theme"].value}</a>
+                        </li>
                         <% if (user == null) {%>
                         <li class="nav-item">
                             <a href="<%= request.getContextPath()%>/login" class="nav-link">Login</a>
@@ -63,7 +66,10 @@
                                 <%-- Co the dung Hello <%= user.getUsername() %> --%>
 
                                 <%-- Duoi day su dung EL (Expression Language) - Ngon ngu bieu thuc --%>
-                                Hello ${loggedInUser.username}, Logout
+                                <%-- Hello ${loggedInUser.username}, Logout --%>
+                                
+                                <%-- Duoi day su dung cookie --%>
+                                Hello ${cookie["tenDangNhap"].value}, Logout
                             </a>
                         </li>
                         <% }%>
