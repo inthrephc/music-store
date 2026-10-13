@@ -52,12 +52,12 @@ public class AlbumServlet extends HttpServlet {
                     request.setAttribute("artistId", artistId);
                 }
                 ArtistDAO artistDAO = new ArtistDAO();
-                List<Artist> list = artistDAO.getList();
+                List<Artist> list = artistDAO.getList(1);
                 request.setAttribute("list", list);
                 request.getRequestDispatcher("/WEB-INF/album/create.jsp").forward(request, response);
             } else if ("edit".equals(view)) {
                 ArtistDAO artistDAO = new ArtistDAO();
-                List<Artist> list = artistDAO.getList();
+                List<Artist> list = artistDAO.getList(1);
                 request.setAttribute("list", list);
                 int id = Integer.parseInt(request.getParameter("id"));
                 albumDAO = new AlbumDAO();

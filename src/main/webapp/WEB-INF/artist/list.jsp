@@ -30,5 +30,24 @@
         }
     %>
 </table>
+<% if ((int) request.getAttribute("totalPages") > 1) { %>
+<nav aria-label="Artist Pagination">
+    <ul class="pagination justify-content-center">
+        <li class="page-item <% if ((int) request.getAttribute("currentPage") <= 1) { %>disabled<% } %>">
+            <a class="page-link" href="${pageContext.request.contextPath}/artist?page=${currentPage - 1}">Prev</a>
+        </li>
+        <% for (int i = 1; i < (int) request.getAttribute("totalPages"); i++) { %>
+        <li class="page-item <% if ((int) request.getAttribute("currentPage") == i) { %>active<% } %>">
+            <a class="page-link" href="${pageContext.request.contextPath}/artist?page=<%= i %>">
+                <%= i %>
+            </a>
+        </li>
+        <%}%>
+        <li class="page-item <% if ((int) request.getAttribute("currentPage") >= (int) request.getAttribute("totalPages")) { %>disabled<% } %>">
+            <a class="page-link" href="${pageContext.request.contextPath}/artist?page=${currentPage + 1}">Next</a>
+        </li>
+    </ul>
+</nav>
+<%}%>
 
 <%@include file="/WEB-INF/include/footer.jsp" %>

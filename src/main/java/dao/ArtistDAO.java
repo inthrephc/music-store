@@ -16,6 +16,7 @@ import java.util.logging.Logger;
  * @author Nguyen Sy Nguyen
  */
 public class ArtistDAO extends DBContext {
+    public static final int PAGE_SIZE = 10;
 
     // create
     public int create(String artistName) {
@@ -42,7 +43,7 @@ public class ArtistDAO extends DBContext {
     }
 
     // read
-    public List<Artist> getList() {
+    public List<Artist> getList(int page) {
 
         // Bien chua ket qua
         List<Artist> result = new ArrayList<>();
@@ -50,10 +51,13 @@ public class ArtistDAO extends DBContext {
         try {
 
             // Cau truy van
-            String sql = "select * from Artist";
+            String sql = "SELECT * FROM Artist ORDER BY ArtistId ASC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+            int offset = (page - 1) * PAGE_SIZE;
 
             // Chuan bi cau lenh
             PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            statement.setInt(1, offset);
+            statement.setInt(2, PAGE_SIZE);
 
             // Thuc thi cau lenh
             // executeQuery() danh cho truy van SELECT
@@ -73,6 +77,25 @@ public class ArtistDAO extends DBContext {
         }
 
         return result;
+    }
+    
+    public int getTotalRows() {
+        try {
+            String sql = "select count(*) from Artist;";
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            System.getLogger(ArtistDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return -1;
+    }
+    
+    public int getTotalPages() {
+        int totalRows = getTotalRows();
+        return (int) Math.ceil((double) totalRows / PAGE_SIZE);
     }
 
     // update

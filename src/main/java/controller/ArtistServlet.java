@@ -71,16 +71,30 @@ public class ArtistServlet extends HttpServlet {
                 request.setAttribute("artistName", artist.getName());
                 request.getRequestDispatcher("/WEB-INF/artist/delete.jsp").forward(request, response);
             } else {
+                String pageParam = request.getParameter("page");
+                int page = 1;
+                try {
+                    if (pageParam != null && !pageParam.trim().isEmpty()) {
+                        page = Integer.parseInt(pageParam);
+                    }
+                } catch (NumberFormatException e) {
+                    page = 1;
+                }
 
-                // Goi DAO
                 ArtistDAO artistDAO = new ArtistDAO();
+                int totalPages = artistDAO.getTotalPages();
 
-                // Lay duoc danh sach Artists trong bang Artist
-                List<Artist> list = artistDAO.getList();
+                if (page < 1) {
+                    page = 1;
+                }
+                if (totalPages > 0 && page > totalPages) {
+                    page = totalPages;
+                }
 
-                // Truyen du lieu de hien thi
+                List<Artist> list = artistDAO.getList(page);
                 request.setAttribute("list", list);
-
+                request.setAttribute("currentPage", page);
+                request.setAttribute("totalPages", totalPages);
                 request.getRequestDispatcher("/WEB-INF/artist/list.jsp").forward(request, response);
             }
         }
