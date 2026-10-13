@@ -43,6 +43,39 @@ public class ArtistDAO extends DBContext {
     }
 
     // read
+    public List<Artist> getList() {
+
+        // Bien chua ket qua
+        List<Artist> result = new ArrayList<>();
+
+        try {
+
+            // Cau truy van
+            String sql = "select * from Artist";
+
+            // Chuan bi cau lenh
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+
+            // Thuc thi cau lenh
+            // executeQuery() danh cho truy van SELECT
+            // executeUpdate() danh cho truy van INSERT/UPDATE/DELETE
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt(1); // Co the truyen so thu tu cua cot tinh tu trai sang phai (tinh tu 1), hoac ten cua cot
+                String name = rs.getString(2);
+                Artist artist = new Artist(id, name);
+                result.add(artist);
+            }
+
+            return result;
+        } catch (SQLException ex) {
+            Logger.getLogger(ArtistDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
+    }
+    
     public List<Artist> getList(int page) {
 
         // Bien chua ket qua
