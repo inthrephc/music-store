@@ -8,7 +8,7 @@
     </form>
 </div>
 <h1>Artist list</h1>
-<table class="table table-hover">
+<table class="table">
     <tr>
         <th>ID</th>
         <th>Artist Name</th>
@@ -17,6 +17,12 @@
     <%
         List<Artist> artistList = (List<Artist>) request.getAttribute("list");
     %>
+
+    <% if (artistList.size() == 0) { %>
+    <tr>
+        <td colspan="3">No artist</td>
+    </tr>
+    <% } else { %>
     <% for (Artist ar : artistList) {%>
     <tr>
         <td><%= ar.getId()%></td>
@@ -38,23 +44,23 @@
         </li>
 
         <% for (int i : (List<Integer>) request.getAttribute("pages")) { %>
-            <% if (i == -1) { %>
-                <li class="page-item disabled">
-                    <span class="page-link">...</span>
-                </li>
-            <% } else if (i == (int) request.getAttribute("currentPage")) {%> 
-                <li class="page-item active">
-                    <a class="page-link" href="${pageContext.request.contextPath}/artist?page=<%= i%>&size=${pageSize}">
-                        <%= i%>
-                    </a>
-                </li>
-            <%} else {%>
-                <li class="page-item">
-                    <a class="page-link" href="${pageContext.request.contextPath}/artist?page=<%= i%>&size=${pageSize}">
-                        <%= i%>
-                    </a>
-                </li>
-            <%}%>
+        <% if (i == -1) { %>
+        <li class="page-item disabled">
+            <span class="page-link">...</span>
+        </li>
+        <% } else if (i == (int) request.getAttribute("currentPage")) {%> 
+        <li class="page-item active">
+            <a class="page-link" href="${pageContext.request.contextPath}/artist?page=<%= i%>&size=${pageSize}">
+                <%= i%>
+            </a>
+        </li>
+        <%} else {%>
+        <li class="page-item">
+            <a class="page-link" href="${pageContext.request.contextPath}/artist?page=<%= i%>&size=${pageSize}">
+                <%= i%>
+            </a>
+        </li>
+        <%}%>
         <%}%>
 
         <li class="page-item <% if ((int) request.getAttribute("currentPage") >= (int) request.getAttribute("totalPages")) { %>disabled<% } %>">
@@ -62,6 +68,7 @@
         </li>
     </ul>
 </nav>
+<%}%>
 <%}%>
 
 <%@include file="/WEB-INF/include/footer.jsp" %>
