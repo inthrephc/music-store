@@ -34,17 +34,17 @@
 <nav aria-label="Artist Pagination">
     <ul class="pagination justify-content-center">
         <li class="page-item <% if ((int) request.getAttribute("currentPage") <= 1) { %>disabled<% } %>">
-            <a class="page-link" href="${pageContext.request.contextPath}/artist?page=${currentPage - 1}">Prev</a>
+            <a class="page-link" href="${pageContext.request.contextPath}/artist?page=${currentPage - 1}&size=${pageSize}">Prev</a>
         </li>
         <% for (int i = 1; i < (int) request.getAttribute("totalPages"); i++) { %>
         <li class="page-item <% if ((int) request.getAttribute("currentPage") == i) { %>active<% } %>">
-            <a class="page-link" href="${pageContext.request.contextPath}/artist?page=<%= i %>">
+            <a class="page-link" href="${pageContext.request.contextPath}/artist?page=<%= i %>&size=${pageSize}">
                 <%= i %>
             </a>
         </li>
         <%}%>
         <li class="page-item <% if ((int) request.getAttribute("currentPage") >= (int) request.getAttribute("totalPages")) { %>disabled<% } %>">
-            <a class="page-link" href="${pageContext.request.contextPath}/artist?page=${currentPage + 1}">Next</a>
+            <a class="page-link" href="${pageContext.request.contextPath}/artist?page=${currentPage + 1}&size=${pageSize}">Next</a>
         </li>
     </ul>
 </nav>

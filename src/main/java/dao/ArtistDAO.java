@@ -16,7 +16,6 @@ import java.util.logging.Logger;
  * @author Nguyen Sy Nguyen
  */
 public class ArtistDAO extends DBContext {
-    public static final int PAGE_SIZE = 10;
 
     // create
     public int create(String artistName) {
@@ -76,7 +75,7 @@ public class ArtistDAO extends DBContext {
         return result;
     }
     
-    public List<Artist> getList(int page) {
+    public List<Artist> getList(int page, int pageSize) {
 
         // Bien chua ket qua
         List<Artist> result = new ArrayList<>();
@@ -85,12 +84,12 @@ public class ArtistDAO extends DBContext {
 
             // Cau truy van
             String sql = "SELECT * FROM Artist ORDER BY ArtistId ASC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-            int offset = (page - 1) * PAGE_SIZE;
+            int offset = (page - 1) * pageSize;
 
             // Chuan bi cau lenh
             PreparedStatement statement = this.getConnection().prepareStatement(sql);
             statement.setInt(1, offset);
-            statement.setInt(2, PAGE_SIZE);
+            statement.setInt(2, pageSize);
 
             // Thuc thi cau lenh
             // executeQuery() danh cho truy van SELECT
@@ -126,9 +125,9 @@ public class ArtistDAO extends DBContext {
         return -1;
     }
     
-    public int getTotalPages() {
+    public int getTotalPages(int pageSize) {
         int totalRows = getTotalRows();
-        return (int) Math.ceil((double) totalRows / PAGE_SIZE);
+        return (int) Math.ceil((double) totalRows / pageSize);
     }
 
     // update

@@ -71,18 +71,23 @@ public class ArtistServlet extends HttpServlet {
                 request.setAttribute("artistName", artist.getName());
                 request.getRequestDispatcher("/WEB-INF/artist/delete.jsp").forward(request, response);
             } else {
-                String pageParam = request.getParameter("page");
-                int page = 1;
+                int pageSize, page;
+
                 try {
-                    if (pageParam != null && !pageParam.trim().isEmpty()) {
-                        page = Integer.parseInt(pageParam);
-                    }
+                    page = Integer.parseInt(request.getParameter("page"));
                 } catch (NumberFormatException e) {
                     page = 1;
                 }
 
+                try {
+                    pageSize = Integer.parseInt(request.getParameter("size"));
+                } catch (NumberFormatException e) {
+                    pageSize = 10;
+                }
+
                 ArtistDAO artistDAO = new ArtistDAO();
-                int totalPages = artistDAO.getTotalPages();
+                int totalPages = artistDAO.getTotalPages(pageSize);
+                int totalRows = artistDAO.getTotalRows();
 
                 if (page < 1) {
                     page = 1;
@@ -91,10 +96,18 @@ public class ArtistServlet extends HttpServlet {
                     page = totalPages;
                 }
 
-                List<Artist> list = artistDAO.getList(page);
+                if (pageSize < 1) {
+                    pageSize = 10;
+                }
+                if (totalRows > 0 && pageSize > totalRows) {
+                    pageSize = totalRows;
+                }
+
+                List<Artist> list = artistDAO.getList(page, pageSize);
                 request.setAttribute("list", list);
                 request.setAttribute("currentPage", page);
                 request.setAttribute("totalPages", totalPages);
+                request.setAttribute("pageSize", pageSize);
                 request.getRequestDispatcher("/WEB-INF/artist/list.jsp").forward(request, response);
             }
         }
