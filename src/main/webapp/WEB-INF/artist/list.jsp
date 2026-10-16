@@ -36,13 +36,27 @@
         <li class="page-item <% if ((int) request.getAttribute("currentPage") <= 1) { %>disabled<% } %>">
             <a class="page-link" href="${pageContext.request.contextPath}/artist?page=${currentPage - 1}&size=${pageSize}">Prev</a>
         </li>
-        <% for (int i = 1; i < (int) request.getAttribute("totalPages"); i++) { %>
-        <li class="page-item <% if ((int) request.getAttribute("currentPage") == i) { %>active<% } %>">
-            <a class="page-link" href="${pageContext.request.contextPath}/artist?page=<%= i %>&size=${pageSize}">
-                <%= i %>
-            </a>
-        </li>
+
+        <% for (int i : (List<Integer>) request.getAttribute("pages")) { %>
+            <% if (i == -1) { %>
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            <% } else if (i == (int) request.getAttribute("currentPage")) {%> 
+                <li class="page-item active">
+                    <a class="page-link" href="${pageContext.request.contextPath}/artist?page=<%= i%>&size=${pageSize}">
+                        <%= i%>
+                    </a>
+                </li>
+            <%} else {%>
+                <li class="page-item">
+                    <a class="page-link" href="${pageContext.request.contextPath}/artist?page=<%= i%>&size=${pageSize}">
+                        <%= i%>
+                    </a>
+                </li>
+            <%}%>
         <%}%>
+
         <li class="page-item <% if ((int) request.getAttribute("currentPage") >= (int) request.getAttribute("totalPages")) { %>disabled<% } %>">
             <a class="page-link" href="${pageContext.request.contextPath}/artist?page=${currentPage + 1}&size=${pageSize}">Next</a>
         </li>

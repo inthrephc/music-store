@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import model.Artist;
 import model.User;
@@ -71,12 +72,12 @@ public class ArtistServlet extends HttpServlet {
                 request.setAttribute("artistName", artist.getName());
                 request.getRequestDispatcher("/WEB-INF/artist/delete.jsp").forward(request, response);
             } else {
-                int pageSize, page;
+                int pageSize, currentPage;
 
                 try {
-                    page = Integer.parseInt(request.getParameter("page"));
+                    currentPage = Integer.parseInt(request.getParameter("page"));
                 } catch (NumberFormatException e) {
-                    page = 1;
+                    currentPage = 1;
                 }
 
                 try {
@@ -89,11 +90,11 @@ public class ArtistServlet extends HttpServlet {
                 int totalPages = artistDAO.getTotalPages(pageSize);
                 int totalRows = artistDAO.getTotalRows();
 
-                if (page < 1) {
-                    page = 1;
+                if (currentPage < 1) {
+                    currentPage = 1;
                 }
-                if (totalPages > 0 && page > totalPages) {
-                    page = totalPages;
+                if (totalPages > 0 && currentPage > totalPages) {
+                    currentPage = totalPages;
                 }
 
                 if (pageSize < 1) {
@@ -103,9 +104,44 @@ public class ArtistServlet extends HttpServlet {
                     pageSize = totalRows;
                 }
 
-                List<Artist> list = artistDAO.getList(page, pageSize);
+                List<Integer> pages = new ArrayList<>();
+                if (totalPages > 1) {
+                    int delta = 2; // pagination offset
+                    int left = Math.max(2, currentPage - delta);
+                    int right = Math.min(totalPages - 1, currentPage + delta);
+
+                    // Luon co trang 1
+                    pages.add(1);
+
+                    // Xu ly dau ... ben trai hoac cac trang dem
+                    if (left > 2) {
+                        pages.add(-1); // -1 bieu thi dau '...'
+                    } else if (left == 2) {
+                        pages.add(2);
+                    }
+
+                    // Cum trang o giua
+                    for (int i = Math.max(left, 3); i <= Math.min(right, totalPages - 2); i++) {
+                        pages.add(i);
+                    }
+
+                    // Xu ly dau '...' ben trai hoac cac trang dem
+                    if (right < totalPages - 1) {
+                        pages.add(-1);
+                    } else if (right == totalPages - 1 && totalPages > 2) {
+                        pages.add(totalPages - 1);
+                    }
+
+                    // luon co trang cuoi
+                    if (totalPages > 1) {
+                        pages.add(totalPages);
+                    }
+                }
+
+                List<Artist> list = artistDAO.getList(currentPage, pageSize);
                 request.setAttribute("list", list);
-                request.setAttribute("currentPage", page);
+                request.setAttribute("currentPage", currentPage);
+                request.setAttribute("pages", pages);
                 request.setAttribute("totalPages", totalPages);
                 request.setAttribute("pageSize", pageSize);
                 request.getRequestDispatcher("/WEB-INF/artist/list.jsp").forward(request, response);
