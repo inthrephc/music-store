@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import model.Album;
 import model.Artist;
@@ -74,9 +75,78 @@ public class AlbumServlet extends HttpServlet {
                 request.setAttribute("title", album.getTitle());
                 request.getRequestDispatcher("/WEB-INF/album/delete.jsp").forward(request, response);
             } else {
+                int pageSize, currentPage;
+
+                try {
+                    currentPage = Integer.parseInt(request.getParameter("page"));
+                } catch (NumberFormatException e) {
+                    currentPage = 1;
+                }
+
+                try {
+                    pageSize = Integer.parseInt(request.getParameter("size"));
+                } catch (NumberFormatException e) {
+                    pageSize = 10;
+                }
+                
                 albumDAO = new AlbumDAO();
-                List<Album> list = albumDAO.getList();
+                int totalPages = albumDAO.getTotalPages(pageSize);
+                int totalRows = albumDAO.getTotalRows();
+
+                if (currentPage < 1) {
+                    currentPage = 1;
+                }
+                if (totalPages > 0 && currentPage > totalPages) {
+                    currentPage = totalPages;
+                }
+
+                if (pageSize < 1) {
+                    pageSize = 10;
+                }
+                if (totalRows > 0 && pageSize > totalRows) {
+                    pageSize = totalRows;
+                }
+
+                List<Integer> pages = new ArrayList<>();
+                if (totalPages > 1) {
+                    int delta = 2; // pagination offset
+                    int left = Math.max(2, currentPage - delta);
+                    int right = Math.min(totalPages - 1, currentPage + delta);
+
+                    // Luon co trang 1
+                    pages.add(1);
+
+                    // Xu ly dau ... ben trai hoac cac trang dem
+                    if (left > 2) {
+                        pages.add(-1); // -1 bieu thi dau '...'
+                    } else if (left == 2) {
+                        pages.add(2);
+                    }
+
+                    // Cum trang o giua
+                    for (int i = Math.max(left, 3); i <= Math.min(right, totalPages - 2); i++) {
+                        pages.add(i);
+                    }
+
+                    // Xu ly dau '...' ben trai hoac cac trang dem
+                    if (right < totalPages - 1) {
+                        pages.add(-1);
+                    } else if (right == totalPages - 1 && totalPages > 2) {
+                        pages.add(totalPages - 1);
+                    }
+
+                    // luon co trang cuoi
+                    if (totalPages > 1) {
+                        pages.add(totalPages);
+                    }
+                }
+
+                List<Album> list = albumDAO.getList(currentPage, pageSize);
                 request.setAttribute("list", list);
+                request.setAttribute("currentPage", currentPage);
+                request.setAttribute("pages", pages);
+                request.setAttribute("totalPages", totalPages);
+                request.setAttribute("pageSize", pageSize);
                 request.getRequestDispatcher("/WEB-INF/album/list.jsp").forward(request, response);
             }
         }

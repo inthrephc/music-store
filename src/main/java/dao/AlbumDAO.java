@@ -46,6 +46,31 @@ public class AlbumDAO extends DBContext {
 
         return result;
     }
+    
+    public List<Album> getList(int page, int pageSize) {
+        try {
+            List<Album> result = new ArrayList<>();
+            String sql = "select al.AlbumId, al.Title, al.ArtistId, ar.Name from Album al join Artist ar on al.ArtistId = ar.ArtistId order by al.AlbumId asc offset ? rows fetch next ? rows only";
+            int offset = (page - 1) * pageSize;
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            statement.setInt(1, offset);
+            statement.setInt(2, pageSize);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(1); 
+                String title = rs.getString(2);
+                int artistId = rs.getInt(3);
+                String artistName = rs.getString(4);
+                Album album = new Album(id, title, new Artist(artistId, artistName));
+                result.add(album);
+            }
+            return result;
+        } catch (SQLException ex) {
+            System.getLogger(AlbumDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        
+        return null;
+    }
 
     public int create(String title, int artistId) {
         try {
@@ -100,6 +125,23 @@ public class AlbumDAO extends DBContext {
         }
         return -1;
     }
+
+    public int getTotalRows() {
+        try {
+            String sql = "select count(*) from Album";
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            System.getLogger(ArtistDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return -1;
+    }
     
-    
+    public int getTotalPages(int pageSize) {
+        int totalRows = getTotalRows();
+        return (int) Math.ceil((double) totalRows / pageSize);
+    }
 }
