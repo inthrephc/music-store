@@ -92,5 +92,58 @@ public class GenreDAO extends DBContext {
         }
         return -1;
     }
+
+    public int getTotalPages(int pageSize) {
+        int totalRows = getTotalRows();
+        return (int) Math.ceil((double) totalRows / pageSize);
+    }
+
+    public int getTotalRows() {
+        try {
+            String sql = "select count(*) from Genre;";
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            System.getLogger(ArtistDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return -1;
+    }
+
+    public List<Genre> getList(int currentPage, int pageSize) {
+        List<Genre> result = new ArrayList<>();
+
+        try {
+
+            // Cau truy van
+            String sql = "SELECT * FROM Genre ORDER BY GenreId ASC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+            int offset = (currentPage - 1) * pageSize;
+
+            // Chuan bi cau lenh
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            statement.setInt(1, offset);
+            statement.setInt(2, pageSize);
+
+            // Thuc thi cau lenh
+            // executeQuery() danh cho truy van SELECT
+            // executeUpdate() danh cho truy van INSERT/UPDATE/DELETE
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt(1); // Co the truyen so thu tu cua cot tinh tu trai sang phai (tinh tu 1), hoac ten cua cot
+                String name = rs.getString(2);
+                Genre genre = new Genre(id, name);
+                result.add(genre);
+            }
+
+            return result;
+        } catch (SQLException ex) {
+            Logger.getLogger(GenreDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
+    }
     
 }
