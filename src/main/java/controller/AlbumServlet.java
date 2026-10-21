@@ -125,19 +125,25 @@ public class AlbumServlet extends HttpServlet {
 
                     // Cum trang o giua
                     for (int i = Math.max(left, 3); i <= Math.min(right, totalPages - 2); i++) {
-                        pages.add(i);
+                        if (!pages.contains(i)) {
+                            pages.add(i);
+                        }
                     }
 
                     // Xu ly dau '...' ben trai hoac cac trang dem
                     if (right < totalPages - 1) {
                         pages.add(-1);
                     } else if (right == totalPages - 1 && totalPages > 2) {
-                        pages.add(totalPages - 1);
+                        if (!pages.contains(totalPages - 1)) {
+                            pages.add(totalPages - 1);
+                        }
                     }
 
                     // luon co trang cuoi
                     if (totalPages > 1) {
-                        pages.add(totalPages);
+                        if (!pages.contains(totalPages)) {
+                            pages.add(totalPages);
+                        }
                     }
                 }
 
