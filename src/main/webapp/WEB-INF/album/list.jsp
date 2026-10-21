@@ -18,6 +18,12 @@
     <%
         List<Album> albumList = (List<Album>) request.getAttribute("list");
     %>
+    
+    <% if (albumList.size() == 0) { %>
+    <tr>
+        <td colspan="4">No album</td>
+    </tr>
+    <% } else { %>
     <% for (Album al : albumList) {%>
     <tr>
         <td><%= al.getId()%></td>
@@ -64,6 +70,7 @@
         </li>
     </ul>
 </nav>
+<%}%>
 <%}%>
 
 <%@include file="/WEB-INF/include/footer.jsp" %>
